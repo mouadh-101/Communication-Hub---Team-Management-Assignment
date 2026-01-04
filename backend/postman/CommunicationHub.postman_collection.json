@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Communication Hub API",
+		"description": "Complete API collection for the Communication Hub multi-tenant messaging platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"alice@example.com\",\n  \"name\": \"Alice Smith\",\n  \"tenantName\": \"Acme Corp\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user. Optionally specify `tenantName` to join an existing tenant or create a new one. If omitted, a personal tenant is created."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"alice@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login with an existing user email. Returns user details including userId and tenantId."
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for registration and login"
+		},
+		{
+			"name": "Tenants",
+			"item": [
+				{
+					"name": "List Tenants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tenants"
+							]
+						},
+						"description": "Get a list of all tenants with their id and name. Used for registration to see available tenants."
+					},
+					"response": []
+				}
+			],
+			"description": "Tenant management endpoints"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "List Tenant Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-user-email",
+								"value": "{{userEmail}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "List all users in the same tenant as the authenticated user. Used for adding team members."
+					},
+					"response": []
+				}
+			],
+			"description": "User management endpoints"
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "List Teams",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-user-email",
+								"value": "{{userEmail}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/teams",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"teams"
+							]
+						},
+						"description": "Get all teams in the user's tenant. Returns teams with `isMember` flag indicating whether the user is a member."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Team",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-user-email",
+								"value": "{{userEmail}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Development Team\",\n  \"description\": \"Core development team\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/teams",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"teams"
+							]
+						},
+						"description": "Create a new team in the user's tenant. The creator is automatically added as a member."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team Members",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-user-email",
+								"value": "{{userEmail}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/teams/{{teamId}}/members",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"teams",
+								"{{teamId}}",
+								"members"
+							]
+						},
+						"description": "Get all members of a specific team. Only accessible if user has access to the team."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Team Member",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-user-email",
+								"value": "{{userEmail}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"user-id-here\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/teams/{{teamId}}/members",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"teams",
+								"{{teamId}}",
+								"members"
+							]
+						},
+						"description": "Add a user to a team. User must be from the same tenant. Only team members can add new members."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team Messages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-user-email",
+								"value": "{{userEmail}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/teams/{{teamId}}/messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"teams",
+								"{{teamId}}",
+								"messages"
+							]
+						},
+						"description": "Get all messages for a team. Returns 403 if user is not a member of the team."
+					},
+					"response": []
+				},
+				{
+					"name": "Send Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-user-email",
+								"value": "{{userEmail}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"Hello team! This is a test message.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/teams/{{teamId}}/messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"teams",
+								"{{teamId}}",
+								"messages"
+							]
+						},
+						"description": "Send a message to a team. Returns 403 if user is not a member of the team."
+					},
+					"response": []
+				}
+			],
+			"description": "Team and messaging endpoints"
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api",
+			"type": "string"
+		},
+		{
+			"key": "userEmail",
+			"value": "alice@example.com",
+			"type": "string"
+		},
+		{
+			"key": "teamId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
